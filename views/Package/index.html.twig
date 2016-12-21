@@ -7,6 +7,14 @@
 {% block content %}
 <div class="row">
     <div class="col-xs-12">
+        {% if app.session.flashBag.has('success') %}
+            <div class="alert alert-success">
+                {% for msg in app.session.flashBag.get('success') %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Showing all packages</h3>

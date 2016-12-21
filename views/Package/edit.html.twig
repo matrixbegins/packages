@@ -5,6 +5,12 @@
 {% block alt_title 'Edit an existing package' %}
 
 {% block content %}
+
+<div class="btn-group" style="float:right;">
+        <a class="btn btn-danger" id="del-packa" data-href="{{ path('manage_package_delete', { id: package.id }) }}">
+            <i class="fa fa-edit"></i> Delete
+        </a>
+</div>
 <form action="{{ path('manage_package_update', { id: package.id }) }}" method="post">
 <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-3">
@@ -72,6 +78,13 @@
         $plugins.fadeOut('fast');
       }
     });
+  })
+  $("#del-packa").click(function(){
+    var r = confirm("Are you sure you want to delete the package ?")
+    if (r == true) {
+        window.location.href = $(this).attr("data-href")
+    }
+
   })
 </script>
 {% endblock %}

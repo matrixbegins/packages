@@ -51,6 +51,87 @@ class PackageController
             )));
     }
 
+
+    public function deleteAction(Application $app, Request $request, $id)
+    {
+        $entityManager = $app->get('doctrine.orm.entity_manager');
+        $package = $entityManager->getRepository('Terramar\Packages\Entity\Package')->find($id);
+        if (!$package) {
+            throw new NotFoundHttpException('Unable to locate Package');
+        }
+
+        // delete dependencies/child rows first
+        // DELETE row from packages_cloneproject_configurations
+        $config = $entityManager->getRepository('Terramar\Packages\Plugin\CloneProject\PackageConfiguration')->findOneBy(array(
+                'package' => $id,
+            ));
+
+        // echo "\n packages_cloneproject_configurations:: ", $config->getId(), "\t ", $config->getPackage()->getName();
+
+        // DELETE row from packages_gitlab_configurations
+        $gitlabConfig = $entityManager->getRepository('Terramar\Packages\Plugin\GitLab\PackageConfiguration')->findOneBy(array(
+                'package' => $id,
+            ));
+
+        // echo "\n packages_gitlab_configurations:: ", $gitlabConfig->getId(), "\t ", $gitlabConfig->getPackage()->getName();
+
+        // DELETE row from packages_github_configurations
+        $gitHubConfig = $entityManager->getRepository('Terramar\Packages\Plugin\GitHub\PackageConfiguration')->findOneBy(array(
+                'package' => $id,
+            ));
+
+        // echo "\n packages_github_configurations:: ", $gitHubConfig->getId(), "\t ", $gitHubConfig->getPackage()->getName();
+
+        // DELETE row from packages_sami_configurations
+        $samiConfig = $entityManager->getRepository('Terramar\Packages\Plugin\Sami\PackageConfiguration')->findOneBy(array(
+                'package' => $id,
+            ));
+
+        // echo "\n packages_sami_configurations:: ", $samiConfig->getId(), "\t ", $samiConfig->getPackage()->getName();
+
+        // DELETE row from packages_satis_configurations
+        $satisConfig = $entityManager->getRepository('Terramar\Packages\Plugin\Satis\PackageConfiguration')->findOneBy(array(
+                'package' => $id,
+            ));
+
+        // echo "\n packages_satis_configurations:: ", $satisConfig->getId(), "\t ", $satisConfig->getPackage()->getName();
+
+        if($samiConfig){
+            $entityManager->remove($samiConfig);
+        }
+
+        if($satisConfig){
+            $entityManager->remove($satisConfig);
+        }
+
+        if($gitHubConfig){
+            $entityManager->remove($gitHubConfig);
+        }
+
+        if($gitlabConfig){
+            $entityManager->remove($gitlabConfig);
+        }
+
+        if($config){
+            $entityManager->remove($config);
+        }
+
+        $packName = $package->getName();
+        // finally removing the package entry from master table.
+        $entityManager->remove($package);
+        $entityManager->flush();
+
+        $request->getSession()
+             ->getFlashBag()->add(
+                'success',
+                'Package ' . $packName . 'deleted successfully!' 
+            );
+
+
+        return new RedirectResponse($app->get('router.url_generator')->generate('manage_packages'));
+
+    }
+
     public function updateAction(Application $app, Request $request, $id)
     {
         /** @var \Doctrine\ORM\EntityManager $entityManager */

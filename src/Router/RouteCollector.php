@@ -28,6 +28,7 @@ class RouteCollector extends BaseCollector
 
         $this->map('/manage/packages', 'manage_packages', 'Terramar\Packages\Controller\PackageController::indexAction');
         $this->map('/manage/package/{id}/edit', 'manage_package_edit', 'Terramar\Packages\Controller\PackageController::editAction');
+        $this->map('/manage/package/{id}/delete', 'manage_package_delete', 'Terramar\Packages\Controller\PackageController::deleteAction');
         $this->map('/manage/package/{id}/update', 'manage_package_update', 'Terramar\Packages\Controller\PackageController::updateAction', ['POST']);
         $this->map('/manage/package/{id}/toggle', 'manage_package_toggle', 'Terramar\Packages\Controller\PackageController::toggleAction');
 

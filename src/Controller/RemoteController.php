@@ -127,6 +127,7 @@ class RemoteController
         $helper = $app->get('packages.helper.sync');
         $packages = $helper->synchronizePackages($remote);
         foreach ($packages as $package) {
+            $package->setSshUrl($package->getWebUrl() . '.git' ); // @DONE BY ANKUR
             $entityManager->persist($package);
         }
 
