@@ -3,6 +3,12 @@ Packages
 
 > Source code repository management made simple.
 
+Just a copy of https://github.com/terramar-labs/packages With following changes:
+
+1. Delete a package from edit package page.
+2. For those how cannot work with SSH URLs for git clone, I am setting WEB URL as SSH URL.
+
+
 [![Build Status](https://img.shields.io/travis/terramar-labs/packages/master.svg?style=flat-square)](https://travis-ci.org/terramar-labs/packages)
 
 Packages extends [Satis](https://github.com/composer/satis), adding useful management functionality like GitHub
